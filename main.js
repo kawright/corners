@@ -159,6 +159,11 @@ function main() {
     koko.setBodyBackgroundColor(COLOR_BACKGROUND);
     koko.setDrawColor(COLOR_ARENA);
     koko.clearScreen();
+
+    koko.setDrawFont(FONT_MAIN, layoutTileSize);
+    koko.setDrawColor(COLOR_MAJOR_SCORE);
+    koko.drawText((layoutScreenWidth / 2) - (koko.guessTextWidth("tap!") / 2), 
+        (layoutScreenHeight / 2) - (layoutTileSize / 2), "tap!");
     nextFrame();
 }
 
