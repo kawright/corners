@@ -1,9 +1,15 @@
 /* Copyright (C) 2025 - Kristoffer A. Wright - All Rights Reserved */
 
-/* Corners - a classic zero-player game we've all played before */
+/* Corners - a port of the classic zero-player game we all know and love. */
 
 
 import * as koko from "./koko.js";
+
+
+/* ----- VERSION NUMBER ----- */
+
+
+const VERSION_NUMBER = "1.0";
 
 
 /* ----- DOM ID CONSTANTS ----- */
@@ -61,6 +67,9 @@ let stateMinorScore = 0;
 
 /* ----- MAIN AND GAME-LOOP FUNCTIONS ----- */
 
+// =====
+// The main game-loop function. Recursively calls itself once-per-frame using `setTimeout`.
+// =====
 function nextFrame() {
     if (koko.getTouchX() != -1) {
         stateMajorScore = 0;
@@ -139,11 +148,14 @@ function nextFrame() {
 }
 
 
-/**
- * Entry point. Called on window's "load" event.
- */
+// =====
+// Application entry point. Called once, when the document is finished loading.
+// =====
 function main() {
-    
+   
+    console.log(`corners - ver. ${VERSION_NUMBER}`);
+    console.log("Copyright (C) 2025 - Kristoffer A. Wright - All Rights Reserved.")
+
     koko.initKoko(DOM_ID_CANVAS, FRAMES_PER_SECOND);
     
     layoutScreenHeight = koko.getScreenHeight();

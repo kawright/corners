@@ -1,14 +1,23 @@
 /* Copyright (C) 2025 - Kristoffer A. Wright - All Rights Reserved */
 
 /**
- * koko - A small framework for creating simple mobile browser games.
+ * koko - A small game-engine for creating simple mobile browser games.
  */
 
 
-/* ----- CONSTANTS ----- */
+/* ----- VERSION NUMBER ----- */
 
 
-const PADDING_SIZE = 32;
+/**
+ * The current version number of `koko`.
+ */
+const VERSION_NUMBER = "1.0";
+
+
+/* ----- PRIVATE CONSTANTS ----- */
+
+
+const __PADDING_SIZE = 32;
 
 
 /* ----- PRIVATE VARIABLES ----- */
@@ -44,20 +53,19 @@ function __onTouchEnd(event) {
 
 
 /**
- * Initialize the `koko` framework. Requires an existing `canvas` element with a given id for `koko` to mount to.
- * @param {string} canvasId The id of the `canvas` element in which `koko` will be mounted.
+ * Initialize the `koko` game engine.
  */
 function initKoko(canvasId, frameRate) {
     if (typeof(window.innerWidth) != "number" || typeof(window.innerHeight) != "number") {
         throw "Could not fetch screen dimensions";
     }
     canvas = document.getElementById(canvasId);
-    screenHeight = window.innerHeight - (PADDING_SIZE * 2);
-    screenWidth = window.innerWidth - PADDING_SIZE;
+    screenHeight = window.innerHeight - (__PADDING_SIZE * 2);
+    screenWidth = window.innerWidth - __PADDING_SIZE;
     canvas.width = screenWidth;
     canvas.height = screenHeight;
     context = canvas.getContext("2d");
-    canvas.style.marginTop = `${PADDING_SIZE / 2}px`;
+    canvas.style.marginTop = `${__PADDING_SIZE / 2}px`;
     canvas.addEventListener("touchstart", __onTouchStart);
     canvas.addEventListener("touchend", __onTouchEnd);    
     framesPerSecond = frameRate;
@@ -70,8 +78,7 @@ function initKoko(canvasId, frameRate) {
 
 
 /**
- * Get the height of the screen.
- * @returns The height of the screen, in pixels.
+ * Get the height of the drawable screen, in pixels.
  */
 function getScreenHeight() {
     return screenHeight;
@@ -79,8 +86,7 @@ function getScreenHeight() {
 
 
 /**
- * Get the width of the screen.
- * @returns The width of the screen, in pixels.
+ * Get the width of the drawable screen, in pixels.
  */
 function getScreenWidth() {
     return screenWidth;
@@ -91,21 +97,24 @@ function getScreenWidth() {
 
 
 /**
- * Set the draw color.
- * @param {string} color The color being assigned. Given as a hex string.
+ * Set the color that will be used for all basic drawing operations.
  */
 function setDrawColor(color) {
     context.fillStyle = color;
 }
 
+
+/**
+ * Set the font that will be used for text drawing operations.
+ */
 function setDrawFont(fontFamily, size) {
     context.font = `bold ${size}px ${fontFamily}`;
     context.textBaseline = "top";
 }
 
+
 /**
- * Set the background color of the document's `body` element.
- * @param {string} color The color being assigned. Given as a hex string.
+ * Set the background color of the document's `body` element. `color` should be given as a hex-string.
  */
 function setBodyBackgroundColor(color) {
     document.body.style.backgroundColor = color;
@@ -114,14 +123,11 @@ function setBodyBackgroundColor(color) {
 
 /**
  * Draw a rectangle at a given position and with given size.
- * @param {number} topLeftX The x-cooridnate of the top-left corner of the rectangle.
- * @param {number} topLeftY The y-coordinate of the top-left corner of the rectangle.
- * @param {number} width The width of the rectangle
- * @param {number} height The height of the rectangle
  */
 function drawRectangle(topLeftX, topLeftY, width, height) {
     context.fillRect(topLeftX, topLeftY, width, height);
 }
+
 
 /**
  * Clear the screen. Sets the screen color to the current draw color.
@@ -131,15 +137,28 @@ function clearScreen() {
 }
 
 
+/**
+ * Draw a line of text at a given position.
+ */
 function drawText(topLeftX, topLeftY, text) {
     context.fillText(text, topLeftX, topLeftY);
 }
 
+
+/**
+ * Get the width of the rectangle surrounding a given line of text if the text were to be drawn to the screen. Does
+ * not actually draw the text to the screen.
+ */
 function guessTextWidth(text) {
     const textInfo = context.measureText(text);
     return textInfo.width;
 }
 
+
+/**
+ * Finds the largest font size that can be used to draw a given line of text inside a rectangular region. Sets the
+ * current draw font to the calculated font.
+ */
 function fitTextToBox(width, height, fontFamily, text) {
     let fontSize = height;
     setDrawFont(fontFamily, fontSize);
@@ -152,13 +171,20 @@ function fitTextToBox(width, height, fontFamily, text) {
 
 /* ----- INPUT FUNCTIONS ----- */
 
-// TODO Document koko.getTouchX
+
+/**
+ * Get the immediate x-position of a single touch screen input. If multiple simultaneous touches are present, only
+ * the first input is returned. If no input is currently registered, returns `-1`.
+ */
 function getTouchX() {
     return touchX;
 }
 
 
-// TODO Document koko.getTouchY
+/**
+ * Get the immediate y-position of a single touch screen input. If multiple simultaneous touched are present, only
+ * the first input is returned. If no input is currently registered, returns `-1`.
+ */
 function getTouchY() {
     return touchY;
 }
@@ -166,7 +192,10 @@ function getTouchY() {
 
 /* ----- RANDOM FUNCTIONS ----- */
 
-// TODO Document koko.randomBoolean
+
+/**
+ * Get a random `boolean` value.
+ */
 function randomBoolean() {
     const randomValue = Math.random();
     if (randomValue < 0.5) {
@@ -178,6 +207,10 @@ function randomBoolean() {
 
 /* ----- TIME FUNCTIONS ----- */
 
+
+/**
+ * Get the number of millisecond ticks left until the next frame swap time.
+ */
 function getTicksToNextFrame() {
     let nextFrameTick;
     let currentTick = Date.now();
@@ -193,6 +226,7 @@ function getTicksToNextFrame() {
 
 
 export {
+    VERSION_NUMBER,
     initKoko,
     getScreenHeight,
     getScreenWidth,
